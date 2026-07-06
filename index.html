@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartPark — Control Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="script" href="script.js">
+</head>
+<body>
+<div class="app-frame">
+<div class="wrap">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">P</span>
+      <div class="brand-text">
+        <h1>SmartPark</h1>
+        <span>Gate &amp; Fare Control</span>
+      </div>
+    </div>
+    <div class="stat-strip">
+      <div class="stat">
+        <span class="stat-label">Occupancy</span>
+        <span class="stat-value" id="occupancyValue">0 / 0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Revenue Today</span>
+        <span class="stat-value" id="revenueValue">₹0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Clock</span>
+        <span class="stat-value mono" id="clockValue">--:--:--</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ HERO: GATE + DISPLAY BOARD ============ -->
+  <section class="hero">
+
+    <div class="gate-bay" id="entryGateBay">
+      <span class="bay-label">ENTRY GATE</span>
+      <div class="gate-frame">
+        <div class="gate-post"></div>
+        <div class="barrier" id="entryBarrier"></div>
+        <div class="gate-post"></div>
+      </div>
+      <span class="gate-status" id="entryGateStatus">CLOSED</span>
+    </div>
+
+    <div class="led-board">
+      <div class="led-board-header">
+        <span class="dot"></span> DISPLAY MODULE — NAVIGATION
+      </div>
+      <div class="led-screen" id="ledScreen">
+        <span id="ledText">WELCOME&nbsp;·&nbsp;ENTER&nbsp;VEHICLE&nbsp;DETAILS&nbsp;TO&nbsp;BEGIN</span>
+      </div>
+    </div>
+
+    <div class="gate-bay" id="exitGateBay">
+      <span class="bay-label">EXIT GATE</span>
+      <div class="gate-frame">
+        <div class="gate-post"></div>
+        <div class="barrier" id="exitBarrier"></div>
+        <div class="gate-post"></div>
+      </div>
+      <span class="gate-status" id="exitGateStatus">CLOSED</span>
+    </div>
+
+  </section>
+
+  <!-- ============ MAIN GRID: MAP + CONSOLE ============ -->
+  <section class="main-grid">
+
+    <!-- LOT MAP -->
+    <div class="panel lot-panel">
+      <h2 class="panel-title">Top-View Parking Simulation</h2>
+      <div id="lotMap" class="lot-map"></div>
+      <div class="legend">
+        <span><i class="swatch free"></i> Free</span>
+        <span><i class="swatch occ"></i> Occupied</span>
+        <span><i class="swatch car"></i> Car</span>
+        <span><i class="swatch bike"></i> Bike</span>
+        <span><i class="swatch ev"></i> EV</span>
+      </div>
+    </div>
+
+    <!-- CONSOLE -->
+    <div class="panel console-panel">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="arrival">Vehicle Arrival</button>
+        <button class="tab-btn" data-tab="exit">Vehicle Exit</button>
+      </div>
+
+      <div class="tab-panel active" id="arrivalPanel">
+        <form id="arrivalForm" autocomplete="off">
+          <label>Number Plate
+            <input type="text" id="plateInput" placeholder="e.g. BA 12 PA 3456" required>
+          </label>
+          <label>Vehicle Type
+            <select id="typeInput">
+              <option value="car">Car</option>
+              <option value="bike">Bike</option>
+              <option value="ev">EV (Electric)</option>
+            </select>
+          </label>
+          <button type="submit" class="btn primary">Simulate Arrival</button>
+        </form>
+        <button type="button" id="randomParkingBtn" class="btn primary">Random Parking Demo</button>
+        <p class="hint" id="arrivalHint"></p>
+      </div>
+
+      <div class="tab-panel" id="exitPanel">
+        <form id="exitForm" autocomplete="off">
+          <label>Parked Vehicle
+            <select id="exitSelect">
+              <option value="">— No vehicles parked —</option>
+            </select>
+          </label>
+          <button type="submit" class="btn danger">Process Exit</button>
+        </form>
+        <p class="hint" id="exitHint"></p>
+      </div>
+
+      <h3 class="ledger-title">Active Vehicles</h3>
+      <div class="table-wrap">
+        <table id="activeTable">
+          <thead>
+            <tr><th>Plate</th><th>Type</th><th>Slot</th><th>Entry</th><th>Duration</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p class="empty-note" id="activeEmpty">No vehicles currently parked.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============ TRANSACTION LOG ============ -->
+  <section class="panel log-panel">
+    <h2 class="panel-title">Transaction Log</h2>
+    <div class="tape" id="tape">
+      <p class="empty-note" id="tapeEmpty">No completed transactions yet.</p>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<!-- ============ RECEIPT MODAL ============ -->
+<div class="modal-backdrop" id="receiptBackdrop">
+  <div class="receipt">
+    <h3>Exit Receipt</h3>
+    <div class="receipt-body" id="receiptBody"></div>
+    <button class="btn primary" id="receiptClose">Close</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
